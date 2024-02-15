@@ -18,7 +18,7 @@ const collisionBlocks = []
 floorCollisions2D.forEach((row, y) => {
     row.forEach((symbol, x) => {
         if (symbol === 202) {
-            console.log('Draw a block here.!!')
+            // console.log('Draw a block here.!!')
             collisionBlocks.push(
                 new CollisionBlock({
                     position: {
@@ -30,7 +30,29 @@ floorCollisions2D.forEach((row, y) => {
         }
     })
 })
-console.log(collisionBlocks)
+
+const platformCollisions2D = []
+for (let i = 0; i < platformCollisions.length; i += 36) {
+    platformCollisions2D.push(platformCollisions.slice(i, i + 36))
+}
+
+const platformCollisionBlocks = []
+platformCollisions2D.forEach((row, y) => {
+    row.forEach((symbol, x) => {
+        if (symbol === 202) {
+            // console.log('Draw a block here.!!')
+            platformCollisionBlocks.push(
+                new CollisionBlock({
+                    position: {
+                        x: x * 16,
+                        y: y * 16,
+                    },
+                })
+            )
+        }
+    })
+})
+
 const gravity = 0.5
 
 const player = new Player({
@@ -68,6 +90,14 @@ function animate() {
     c.scale(4, 4)
     c.translate(0, -background.image.height + sacledCanvas.height)
     background.update()
+    collisionBlocks.forEach((collisionBlock) => {
+        collisionBlock.update()
+    })
+
+    platformCollisionBlocks.forEach((block) => {
+        block.update()
+    })
+
     c.restore()
 
     player.update()
